@@ -5,7 +5,7 @@ import (
 	"math/big"
 )
 
-const alphaNum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const alphaNum = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
 
 // Generator random id generator
 type Generator struct {
