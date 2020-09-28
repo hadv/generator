@@ -1,7 +1,6 @@
 package generator_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/hadv/generator"
@@ -15,10 +14,21 @@ func TestGenerator(t *testing.T) {
 	assert.Equal(t, "tnx_", id[0:4])
 }
 
-func TestGeneratorPrintOut(t *testing.T) {
+func benchmarkGenerator(n int, b *testing.B) {
 	gen := generator.New(20, "tnx", "_")
-	for i := 0; i < 1000; i++ {
-		id, _ := gen.Get()
-		fmt.Println(id)
+	for i := 0; i < n; i++ {
+		_, _ = gen.Get()
 	}
+}
+
+func BenchmarkGenerator10(b *testing.B) {
+	benchmarkGenerator(10, b)
+}
+
+func BenchmarkGenerator100(b *testing.B) {
+	benchmarkGenerator(100, b)
+}
+
+func BenchmarkGenerator1000(b *testing.B) {
+	benchmarkGenerator(1000, b)
 }
