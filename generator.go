@@ -1,9 +1,8 @@
 package generator
 
 import (
-	"math/rand"
-	"strings"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 const alphaNum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,25 +15,25 @@ type Generator struct {
 }
 
 // New create new random id generator
-func New(len int, prefix string, separator string) (*Generator, error) {
+func New(len int, prefix string, separator string) *Generator {
 	return &Generator{
 		len:       len,
 		prefix:    prefix,
 		separator: separator,
-	}, nil
+	}
 }
 
 // Get generate a new random id
-func (id *Generator) Get() string {
-	rand.Seed(time.Now().UnixNano())
-	rnd := make([]byte, id.len)
-	rand.Read(rnd)
-	value := make([]string, id.len)
-	charsLength := byte(len(alphaNum))
+func (id *Generator) Get() (string, error) {
+	ret := make([]byte, 0)
 
 	for i := 0; i < id.len; i++ {
-		value[i] = alphaNum[rnd[i]%charsLength : rnd[i]%charsLength+1]
+		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(alphaNum))))
+		if err != nil {
+			return "", err
+		}
+		ret = append(ret, alphaNum[num.Int64()])
 	}
 
-	return id.prefix + id.separator + strings.Join(value, "")
+	return id.prefix + id.separator + string(ret), nil
 }
